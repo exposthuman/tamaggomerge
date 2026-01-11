@@ -1,13 +1,7 @@
-//
-//  GameScene.swift
-//  tamaggomerge
-//
-//  Created by admin on 11.01.2026.
-//
-
 import SpriteKit
 import GameplayKit
 
+// MARK: - Match-3 + Cookie Physics
 final class GameScene: SKScene, SKPhysicsContactDelegate {
 
     private struct Tile {
@@ -247,27 +241,21 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
                         streak.append(col)
                     } else {
                         if lastType != nil, streak.count >= 3 {
-                            for streakCol in streak {
-                                matched.insert([row, streakCol])
-                            }
+                            for streakCol in streak { matched.insert([row, streakCol]) }
                         }
                         lastType = tile.type
                         streak = [col]
                     }
                 } else {
                     if lastType != nil, streak.count >= 3 {
-                        for streakCol in streak {
-                            matched.insert([row, streakCol])
-                        }
+                        for streakCol in streak { matched.insert([row, streakCol]) }
                     }
                     lastType = nil
                     streak = []
                 }
             }
             if lastType != nil, streak.count >= 3 {
-                for streakCol in streak {
-                    matched.insert([row, streakCol])
-                }
+                for streakCol in streak { matched.insert([row, streakCol]) }
             }
         }
 
@@ -280,27 +268,21 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
                         streak.append(row)
                     } else {
                         if lastType != nil, streak.count >= 3 {
-                            for streakRow in streak {
-                                matched.insert([streakRow, col])
-                            }
+                            for streakRow in streak { matched.insert([streakRow, col]) }
                         }
                         lastType = tile.type
                         streak = [row]
                     }
                 } else {
                     if lastType != nil, streak.count >= 3 {
-                        for streakRow in streak {
-                            matched.insert([streakRow, col])
-                        }
+                        for streakRow in streak { matched.insert([streakRow, col]) }
                     }
                     lastType = nil
                     streak = []
                 }
             }
             if lastType != nil, streak.count >= 3 {
-                for streakRow in streak {
-                    matched.insert([streakRow, col])
-                }
+                for streakRow in streak { matched.insert([streakRow, col]) }
             }
         }
         return matched
@@ -453,7 +435,10 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     private func resolveCookieClusters() {
-        let cookies = children.compactMap { $0 as? SKSpriteNode }.filter { $0.physicsBody != nil && $0.userData?["type"] != nil }
+        let cookies = children
+            .compactMap { $0 as? SKSpriteNode }
+            .filter { $0.physicsBody != nil && $0.userData?["type"] != nil }
+
         var visited = Set<SKSpriteNode>()
 
         for cookie in cookies where !visited.contains(cookie) {
@@ -499,5 +484,56 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
         cookie.physicsBody = body
         cookie.userData = ["type": upgradedType]
         addChild(cookie)
+    } // <- закрыли spawnUpgradedCookie
+} // <- закрыли GameScene
+
+// MARK: - Rooms / Decoration
+final class RoomScene: SKScene {
+    private let roomId: String
+    private let catalog = CatalogService.shared
+    private let state = GameState.shared
+
+    private var room: Room?
+    private var selectedItem: Item?
+
+    private let balanceLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
+    private let statsLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
+    private let messageLabel = SKLabelNode(fontNamed: "AvenirNext-Regular")
+    private let roomLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
+    private let petNode = SKShapeNode(circleOfRadius: 45)
+
+    private var slotNodes: [String: SKShapeNode] = [:]
+    private var itemLabels: [String: SKLabelNode] = [:]
+
+    init(roomId: String, size: CGSize) {
+        self.roomId = roomId
+        super.init(size: size)
+        scaleMode = .aspectFill
+        backgroundColor = SKColor(red: 0.94, green: 0.95, blue: 0.98, alpha: 1.0)
     }
-}
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func didMove(to view: SKView) {
+        room = catalog.room(for: roomId)
+        setupUI()
+        populateSlots()
+        updateBalances()
+        updateStats()
+        updateMessage("Pick an item to buy, then tap a slot to place it.")
+    }
+
+    // ... весь твой код RoomScene без изменений ...
+
+    private func animatePetReaction() {
+        let scaleUp = SKAction.scale(to: 1.1, duration: 0.15)
+        let scaleDown = SKAction.scale(to: 1.0, duration: 0.2)
+        let wiggleLeft = SKAction.rotate(byAngle: 0.1, duration: 0.1)
+        let wiggleRight = SKAction.rotate(byAngle: -0.2, duration: 0.2)
+        let reset = SKAction.rotate(toAngle: 0, duration: 0.1)
+        let sequence = SKAction.sequence([scaleUp, wiggleLeft, wiggleRight, reset, scaleDown])
+        petNode.run(sequence)
+    } // <- закрыли animatePetReaction
+} // <- закрыли RoomScene
