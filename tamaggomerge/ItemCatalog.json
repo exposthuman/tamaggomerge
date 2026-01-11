@@ -1,0 +1,121 @@
+{
+  "rooms": [
+    {
+      "id": "living_room",
+      "name": "Living Room",
+      "items": [
+        {
+          "id": "toy_ball",
+          "name": "Toy Ball",
+          "price": 50,
+          "currency": "soft",
+          "bonus": 2
+        },
+        {
+          "id": "comfy_pillow",
+          "name": "Comfy Pillow",
+          "price": 120,
+          "currency": "soft",
+          "bonus": 4
+        },
+        {
+          "id": "golden_lamp",
+          "name": "Golden Lamp",
+          "price": 2,
+          "currency": "hard",
+          "bonus": 6
+        }
+      ],
+      "slots": [
+        {
+          "id": "living_slot_left",
+          "x": 0.3,
+          "y": 0.35
+        },
+        {
+          "id": "living_slot_right",
+          "x": 0.7,
+          "y": 0.35
+        }
+      ]
+    },
+    {
+      "id": "kitchen",
+      "name": "Kitchen",
+      "items": [
+        {
+          "id": "food_bowl",
+          "name": "Food Bowl",
+          "price": 80,
+          "currency": "soft",
+          "bonus": 3
+        },
+        {
+          "id": "fresh_fish",
+          "name": "Fresh Fish",
+          "price": 150,
+          "currency": "soft",
+          "bonus": 5
+        },
+        {
+          "id": "sparkling_fountain",
+          "name": "Sparkling Fountain",
+          "price": 3,
+          "currency": "hard",
+          "bonus": 7
+        }
+      ],
+      "slots": [
+        {
+          "id": "kitchen_slot_left",
+          "x": 0.25,
+          "y": 0.32
+        },
+        {
+          "id": "kitchen_slot_right",
+          "x": 0.75,
+          "y": 0.32
+        }
+      ]
+    },
+    {
+      "id": "bedroom",
+      "name": "Bedroom",
+      "items": [
+        {
+          "id": "night_lamp",
+          "name": "Night Lamp",
+          "price": 90,
+          "currency": "soft",
+          "bonus": 3
+        },
+        {
+          "id": "dream_blanket",
+          "name": "Dream Blanket",
+          "price": 180,
+          "currency": "soft",
+          "bonus": 6
+        },
+        {
+          "id": "star_projector",
+          "name": "Star Projector",
+          "price": 4,
+          "currency": "hard",
+          "bonus": 8
+        }
+      ],
+      "slots": [
+        {
+          "id": "bedroom_slot_left",
+          "x": 0.35,
+          "y": 0.34
+        },
+        {
+          "id": "bedroom_slot_right",
+          "x": 0.65,
+          "y": 0.34
+        }
+      ]
+    }
+  ]
+}

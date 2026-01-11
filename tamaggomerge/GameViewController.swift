@@ -1,36 +1,34 @@
-//
-//  GameViewController.swift
-//  tamaggomerge
-//
-//  Created by admin on 11.01.2026.
-//
-
 import UIKit
 import SpriteKit
-import GameplayKit
 
-class GameViewController: UIViewController {
+final class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let scene = GKScene(fileNamed: "GameScene") {
-            if let sceneNode = scene.rootNode as? GameScene {
-                sceneNode.entities = scene.entities
-                sceneNode.graphs = scene.graphs
-                sceneNode.scaleMode = .aspectFill
+        guard let skView = self.view as? SKView else { return }
 
-                if let view = self.view as? SKView {
-                    view.presentScene(sceneNode)
-                    view.ignoresSiblingOrder = true
-                    view.shouldCullNonVisibleNodes = true
-                    view.preferredFramesPerSecond = 60
-                    view.showsFPS = false
-                    view.showsNodeCount = false
-                    view.showsDrawCount = false
-                }
-            }
+        // 1) Онбординг, если еще не пройден
+        if !UserDefaults.standard.bool(forKey: OnboardingScene.onboardingKey) {
+            let onboarding = OnboardingScene(size: skView.bounds.size)
+            onboarding.scaleMode = .aspectFill
+            skView.presentScene(onboarding)
+        } else {
+            // 2) Основная сцена (комната)
+            let scene = RoomScene(roomId: "living_room", size: skView.bounds.size)
+            scene.scaleMode = .aspectFill
+            skView.presentScene(scene)
         }
+
+        // Общие настройки вью
+        skView.ignoresSiblingOrder = true
+        skView.shouldCullNonVisibleNodes = true
+        skView.preferredFramesPerSecond = 60
+
+        // Дебаг (можешь выключить позже)
+        skView.showsFPS = true
+        skView.showsNodeCount = true
+        skView.showsDrawCount = false
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -42,6 +40,6 @@ class GameViewController: UIViewController {
     }
 
     override var prefersStatusBarHidden: Bool {
-        return true
+        true
     }
 }
